@@ -29,12 +29,13 @@ Benchmark and test suite will contain a variety of problems:
 - random qubos or various densities
 - TSP problems
 - parallel-solved problems from graph cuts
+- simulation of single-bit flip in postprocessing step (possible in QBSolv?)
 
 ## Software requirements
 
 - QBSolv (see src/ directory for installation)
 - High performance graph partition software (eventually, NetworkX will suffice for now)
-- A simple database for starage and lookup
+- A simple database for storage and lookup
 
 Software will be broken into 
 - Testing
