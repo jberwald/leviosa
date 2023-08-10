@@ -1,13 +1,26 @@
-import numpy as np
+from typing import Union
 
-def array2dict(arr: np.ndarray) -> dict:
-    assert arr.shape[0] == arr.shape[1], "arr must be square"
-    assert np.all(arr == arr.T), "arr must be symmetric"
-    d = {}
-    for i in range(arr.shape[0]):
-        for j in range(arr.shape[1]):
-            d[i,j] = arr[i,j]
-    return d
+import numpy as np
+import scipy.sparse as sp
+
+
+def convert_qubo_to_dict(qubo: Union[np.ndarray, sp.sparse]) -> dict:
+    assert qubo.shape[0] == qubo.shape[1], "arr must be square"
+    # TODO: check for symmetry
+    qubo_ = {}
+    if isinstance(qubo, np.ndarray):
+        for i in range(qubo.shape[0]):
+            for j in range(qubo.shape[1]):
+                qubo_[i, j] = qubo[i, j]
+    elif isinstance(qubo, sp.spmatrix):
+        qubo = qubo.tocoo()
+        row_col = zip(qubo.row, qubo.col)
+        data = qubo.data
+        for ij, val in zip(row_col, data):
+            qubo_[ij] = val
+    else:
+        raise ValueError("Unknown data type, must pass an ndarray or sparse matrix.")
+    return qubo_
 
 
 def compute_energy(qubo, soln_vec):
